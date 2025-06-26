@@ -20,7 +20,7 @@
 </head>
 
 <body class="bg-gradient-to-t from-emerald-900 to-emerald-700 flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-    <div class="flex flex-col gap-2 text-center bg-white w-full md:w-1/2 lg:w-[500px] rounded-4xl p-4">
+    <div class="flex flex-col gap-2 text-center bg-white w-full md:w-1/2 lg:w-[400px] rounded-4xl p-4">
         <h1 class="text-3xl font-semibold text-slate-600">Simulador</h1>
 
         <select id="tipo" class="bg-gray-200 p-4 rounded-2xl text-gray-500">
@@ -42,17 +42,19 @@
             <option value="">Nenhum modelo selecionado</option>
         </select>
 
-        <div id="valor"></div>
+        <div class="w-full p-1 bg-green-200 border-green-500 border font-medium text-green-900 text-sm">
+            <div id="valor" >Selecione o Veículo</div>
+            <div id="valor-mensalidade"></div>
+            <div id="valor-cota"></div>
+        </div>
 
-        <div>
+        <div id="cota-tabela" class="hidden">
             <h1 class="text-2xl text-slate-600">Selecione a Tabela</h1>
             <select id="cota" disabled class="bg-gray-200 p-4 rounded-2xl text-gray-500 w-full mt-2">
                 <option value="">Escolha o veículo primeiro</option>
             </select>
         </div>
 
-        <div id="valor-mensalidade"></div>
-        <div id="valor-cota"></div>
 
         <div id="opcionais-carro" class="hidden">
             <h1 class="text-2xl text-slate-600">Opcionais Carro</h1>
@@ -94,32 +96,62 @@
         <div id="opcionais-caminhao" class="hidden">
             <h1 class="text-2xl text-slate-600">Opcionais Caminhão</h1>
 
+            <select id="terceiros" class="bg-gray-200 p-4 rounded-2xl text-gray-500 w-full mt-2">
+                <option value="0">Selecione o plano para Terceiros</option>
+                <option value="182,00">R$ 50.000,00 DM/DC - R$ 182,00</option>
+                <option value="210,00">R$ 100.000,00 DM/DC - R$ 210,00</option>
+                <option value="265,00">R$ 200.000,00 DM/DC - R$ 265,00</option>
+                <option value="305,00">R$ 300.000,00 DM/DC - R$ 305,00</option>
+                <option value="355,00">R$ 500.000,00 DM/DC - R$ 355,00</option>
+                <option value="480,00">R$ 1.000.000,00 DM/DC - R$ 480,00</option>
+            </select>
+
+            <select id="guincho" class="bg-gray-200 p-4 rounded-2xl text-gray-500 w-full mt-2">
+                <option value="0">Selecione o plano de Guincho</option>
+                <option value="65,49">Guincho - 200KM Total - R$ 65,49</option>
+                <option value="91,46">Guincho - 400KM Total - R$ 91,46</option>
+                <option value="130,37">Guincho - 800KM Total - R$ 130,37</option>
+                <option value="196,71">Guincho - 1200KM Total - R$ 196,71</option>
+            </select>
+            
             <ul class="grid w-full gap-3 mt-2">
+                {{-- Opcionais --}}
+
                 <li>
                     <input type="checkbox" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required />
                     <label for="hosting-small" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
                         <div class="flex flex-row items-center justify-between w-full">
-                            <div class="text-base font-normal">R$ 150.000,00 para terceiros</div>
-                            <div>R$ 15,00</div>
+                            <div class="text-base font-normal">APP - R$ 10.000,00</div>
+                            <div>R$ 1,39</div>
                         </div>
                     </label>
                 </li>
 
                 <li>
-                    <input type="checkbox" id="hosting-small2" name="hosting2" value="hosting-small2" class="hidden peer" required />
-                    <label for="hosting-small2" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                    <input type="checkbox" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required />
+                    <label for="hosting-small" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
                         <div class="flex flex-row items-center justify-between w-full">
-                            <div class="text-base font-normal">100% para os Vidros</div>
-                            <div>R$ 9,90</div>
+                            <div class="text-base font-normal">Danos Morais - R$ 10.000,00</div>
+                            <div>R$ 8,00</div>
                         </div>
                     </label>
                 </li>
 
                 <li>
-                    <input type="checkbox" id="hosting-small3" name="hosting3" value="hosting-small3" class="hidden peer" required />
-                    <label for="hosting-small3" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                    <input type="checkbox" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required />
+                    <label for="hosting-small" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
                         <div class="flex flex-row items-center justify-between w-full">
-                            <div class="text-base font-normal text-left">Rastreador</div>
+                            <div class="text-base font-normal">100% Proteção para os Vidros</div>
+                            <div>R$ 15,90</div>
+                        </div>
+                    </label>
+                </li>
+
+                <li>
+                    <input type="checkbox" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required />
+                    <label for="hosting-small" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                        <div class="flex flex-row items-center justify-between w-full">
+                            <div class="text-base font-normal">Rastreador</div>
                             <div>R$ 70,00</div>
                         </div>
                     </label>
@@ -153,7 +185,7 @@
         cotaSelect.disabled = true;
 
         // Limpar textos
-        document.getElementById('valor').innerText = '';
+        // document.getElementById('valor').innerText = '';
         document.getElementById('valor-mensalidade').innerText = '';
         document.getElementById('valor-cota').innerText = '';
 
