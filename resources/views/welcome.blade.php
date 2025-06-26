@@ -54,8 +54,8 @@
         <div id="valor-mensalidade"></div>
         <div id="valor-cota"></div>
 
-        <div id="opcionais-carro">
-            <h1 class="text-2xl text-slate-600">Opcionais</h1>
+        <div id="opcionais-carro" class="hidden">
+            <h1 class="text-2xl text-slate-600">Opcionais Carro</h1>
 
             <ul class="grid w-full gap-3 mt-2">
                 <li>
@@ -91,7 +91,40 @@
 
         </div>
 
-        <div id="opcionais-caminhao">
+        <div id="opcionais-caminhao" class="hidden">
+            <h1 class="text-2xl text-slate-600">Opcionais Caminhão</h1>
+
+            <ul class="grid w-full gap-3 mt-2">
+                <li>
+                    <input type="checkbox" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required />
+                    <label for="hosting-small" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                        <div class="flex flex-row items-center justify-between w-full">
+                            <div class="text-base font-normal">R$ 150.000,00 para terceiros</div>
+                            <div>R$ 15,00</div>
+                        </div>
+                    </label>
+                </li>
+
+                <li>
+                    <input type="checkbox" id="hosting-small2" name="hosting2" value="hosting-small2" class="hidden peer" required />
+                    <label for="hosting-small2" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                        <div class="flex flex-row items-center justify-between w-full">
+                            <div class="text-base font-normal">100% para os Vidros</div>
+                            <div>R$ 9,90</div>
+                        </div>
+                    </label>
+                </li>
+
+                <li>
+                    <input type="checkbox" id="hosting-small3" name="hosting3" value="hosting-small3" class="hidden peer" required />
+                    <label for="hosting-small3" class="inline-flex items-center justify-between w-full p-3 rounded-lg cursor-pointer dark:border-gray-100 dark:border dark:peer-checked:border dark:peer-checked:text-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:bg-blue-100 dark:text-gray-300 dark:bg-gray-100">
+                        <div class="flex flex-row items-center justify-between w-full">
+                            <div class="text-base font-normal text-left">Rastreador</div>
+                            <div>R$ 70,00</div>
+                        </div>
+                    </label>
+                </li>
+            </ul>
         </div>
 
         <a href="" class="bg-green-500 p-2 rounded text-white">Enviar no WhatsApp</a>
@@ -100,31 +133,63 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.getElementById('tipo').addEventListener('change', function() {
-            // resetar campos dependentes
-            document.getElementById('marca').innerHTML = '<option value="">Selecione a Marca</option>';
-            document.getElementById('valor').innerText = '';
+        document.getElementById('tipo').addEventListener('change', function () {
 
-            document.getElementById('marca').disabled = true;
-            document.getElementById('modelo').disabled = true;
-            document.getElementById('ano').disabled = true;
+        const marcaSelect = document.getElementById('marca');
+        const modeloSelect = document.getElementById('modelo');
+        const anoSelect = document.getElementById('ano');
+        const cotaSelect = document.getElementById('cota');
 
-            const tipo = this.value;
-            if (!tipo) return;
+        // Reset dos campos
+        marcaSelect.innerHTML = '<option value="">Selecione a Marca</option>';
+        modeloSelect.innerHTML = '<option value="">Selecione o modelo</option>';
+        anoSelect.innerHTML = '<option value="">Selecione o ano</option>';
+        cotaSelect.innerHTML = '<option value="">Escolha o veículo primeiro</option>';
 
-            axios.get(`/api/fipe/brands/${tipo}`).then(res => {
-                const marcas = res.data;
-                const marcasBloqueadas = ['Acura', 'Agrale', 'Alfa Romeo', 'AM Gen', 'Asia Motors', 'ASTON MARTIN', 'Baby', 'BRM', 'Bugre', 'CAB Motors', 'Cadillac', 'CBT Jipe', 'CHANGAN', 'Chrysler', 'Cross Lander', 'D2D Motors', 'Daewoo', 'Daihatsu', 'DFSK', 'Engesa', 'Envemo', 'Ferrari', 'FEVER', 'Fibravan', 'Fyber', 'GEELY', 'GREAT WALL', 'Isuzu', 'Jaecoo', 'JINBEI', 'Lada', 'Lexus', 'LOBINI', 'Lotus', 'Mahindra', 'Maserati', 'Matra', 'Mazda', 'Mclaren', 'Mercury', 'MG', 'Miura', 'NETA', 'Omoda', 'Plymouth', 'Pontiac', 'RELY', 'Rolls-Royce', 'Saab', 'Saturn', 'Seat', 'SERES', 'SHINERAY', 'smart', 'TAC', 'Wake', 'Walk', 'ZEEKR'];
-                let marcaSelect = document.getElementById('marca');
+        // Bloqueia selects dependentes
+        marcaSelect.disabled = true;
+        modeloSelect.disabled = true;
+        anoSelect.disabled = true;
+        cotaSelect.disabled = true;
 
-                marcas.forEach(m => {
-                    if (!marcasBloqueadas.includes(m.name)) {
-                        marcaSelect.innerHTML += `<option value="${m.code}">${m.name}</option>`;
-                    }
-                });
-                marcaSelect.disabled = false;
-            });
+        // Limpar textos
+        document.getElementById('valor').innerText = '';
+        document.getElementById('valor-mensalidade').innerText = '';
+        document.getElementById('valor-cota').innerText = '';
+
+        // Esconde opcionais
+        document.getElementById('opcionais-carro').classList.add('hidden');
+        document.getElementById('opcionais-caminhao').classList.add('hidden');
+
+        // Desmarca todos os checkbox opcionais
+        document.querySelectorAll('#opcionais-carro input[type="checkbox"], #opcionais-caminhao input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
         });
+
+        const tipo = this.value;
+        if (!tipo) return;
+
+        // Carrega marcas se o tipo for válido
+        axios.get(`/api/fipe/brands/${tipo}`).then(res => {
+            const marcas = res.data;
+            const marcasBloqueadas = [
+                'Acura', 'Agrale', 'Alfa Romeo', 'AM Gen', 'Asia Motors', 'ASTON MARTIN', 'Baby', 'BRM', 'Bugre',
+                'CAB Motors', 'Cadillac', 'CBT Jipe', 'CHANGAN', 'Chrysler', 'Cross Lander', 'D2D Motors', 'Daewoo',
+                'Daihatsu', 'DFSK', 'Engesa', 'Envemo', 'Ferrari', 'FEVER', 'Fibravan', 'Fyber', 'GEELY', 'GREAT WALL',
+                'Isuzu', 'Jaecoo', 'JINBEI', 'Lada', 'Lexus', 'LOBINI', 'Lotus', 'Mahindra', 'Maserati', 'Matra',
+                'Mazda', 'Mclaren', 'Mercury', 'MG', 'Miura', 'NETA', 'Omoda', 'Plymouth', 'Pontiac', 'RELY',
+                'Rolls-Royce', 'Saab', 'Saturn', 'Seat', 'SERES', 'SHINERAY', 'smart', 'TAC', 'Wake', 'Walk', 'ZEEKR'
+            ];
+
+            marcas.forEach(m => {
+                if (!marcasBloqueadas.includes(m.name)) {
+                    marcaSelect.innerHTML += `<option value="${m.code}">${m.name}</option>`;
+                }
+            });
+
+            marcaSelect.disabled = false;
+        });
+    });
 
         document.getElementById('marca').addEventListener('change', function() {
             const tipo = document.getElementById('tipo').value;
@@ -198,35 +263,58 @@
                 cotaSelect.disabled = false;
 
                 // Evento para calcular e exibir valor da mensalidade
-                cotaSelect.onchange = function() {
-                    const cota = parseFloat(this.value); // Exemplo: 0.21 significa 0,21%
-                    if (!isNaN(cota)) {
+                cotaSelect.onchange = function () {
+                const cota = parseFloat(this.value);
+                const tipo = document.getElementById('tipo').value;
 
-                        // Limpar o valor da FIPE
-                        const valorFipeNumerico = parseFloat(
-                            valorFipe.replace(/[R$\s.]/g, '').replace(',', '.')
-                        );
+                const divCarro = document.getElementById('opcionais-carro');
+                const divCaminhao = document.getElementById('opcionais-caminhao');
 
-                        // Cálculo: valor da mensalidade corresponde à porcentagem do valor FIPE
-                        const valorMensalidade = ((valorFipeNumerico * (cota / 100)) + 2).toFixed(2);
-                        const valorCota = (valorFipeNumerico * 4) / 100;
+                divCarro.classList.add('hidden');
+                divCaminhao.classList.add('hidden');
 
-                        document.getElementById('valor-mensalidade').innerText =
-                            'Valor da Mensalidade: R$ ' + valorMensalidade.toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            });
+                if (tipo === 'cars') {
+                    divCarro.classList.remove('hidden');
+                } else if (tipo === 'trucks') {
+                    divCaminhao.classList.remove('hidden');
+                }
 
-                        document.getElementById('valor-cota').innerText = 'Cota de Participação: ' + valorCota.toLocaleString('pt-BR', {
+                if (!isNaN(cota)) {
+
+                    const valorFipeNumerico = parseFloat(
+                        valorFipe.replace(/[R$\s.]/g, '').replace(',', '.')
+                    );
+
+                    let valorBaseMensalidade = valorFipeNumerico * (cota / 100);
+
+                    // Aplicar mínimo conforme tipo
+                    if (tipo === 'cars' && valorBaseMensalidade < 63) {
+                        valorBaseMensalidade = 63;
+                    } else if (tipo === 'motorcycles' && valorBaseMensalidade < 40) {
+                        valorBaseMensalidade = 40;
+                    }
+
+                    const valorFinalMensalidade = (valorBaseMensalidade + 2).toFixed(2);
+                    const valorCota = (valorFipeNumerico * 4) / 100;
+
+                    document.getElementById('valor-mensalidade').innerText =
+                        'Valor da Mensalidade: R$ ' + valorFinalMensalidade.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         });
 
+                    document.getElementById('valor-cota').innerText =
+                        'Cota de Participação: ' + valorCota.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        });
 
-                    } else {
-                        document.getElementById('valor-mensalidade').innerText = '';
-                    }
-                };
+                } else {
+                    document.getElementById('valor-mensalidade').innerText = '';
+                    document.getElementById('valor-cota').innerText = '';
+                }
+            };
+
             });
         });
     </script>
